@@ -38,7 +38,7 @@ const port = 3333;
     });
 
     //REGISTER and GET (VIEW) single user data, by id handler
-    //Postman Test - http://localhost:3333/api/staff/
+    //Postman Test - http://localhost:3333/api/staff/30592138-6c92-4020-8df1-118a6dd97bd5
     app.get('/api/staff/:id', async (req, res) => {
         const id = req.params.id;
         const staff = await staffService.getById(id);
@@ -47,9 +47,35 @@ const port = 3333;
         //Postman Test - all data for specific user should show in response (based on user ID)
         res.json(staff);
     });
-     
+    
+
+    //REGISTER and POST (ADD), new user handler, automatically generate ID, API and store with centralised data location
+    //Postman Test - http://localhost:3333/api/staff
+    app.post('/api/staff', async (req, res) => {
+        const staffData = req.body;
+
+        const staff = {
+            id: null,
+            name: staffData.name,
+            phone: staffData.phone,
+            deptID: staffData.deptID,
+            deptName: staffData.deptName,
+            street: staffData.street,
+            city: staffData.city,
+            state: staffData.state,
+            zip: staffData.zip,
+            country: staffData.country
+        };
+
+        await staffService.add(staff);
+        //console log for success new addition of staff
+        console.log("New staff added successfully");
+        //Postman Test - new user data should show in response
+        res.json(staff);
+    });
+
     //REGISTER and UPDATE single user, by id handler
-    //Postman Test - http://localhost:3333/api/staff/
+    //Postman Test - http://localhost:3333/api/staff/924cf8f9-b33d-4f2d-bf03-6db9198e7359
     app.put('/api/staff/:id', async (req, res) => {
         const id = req.params.id;
 
@@ -76,14 +102,14 @@ const port = 3333;
     });
 
     //REGISTER and DELETE single user, by id handler (Function Only Available by Server Administrator)
-    //Postman Test - http://localhost:3333/api/staff/
+    //Postman Test - http://localhost:3333/api/staff
     app.delete('/api/staff/:id', async (req, res) => {
         const id = req.params.id;
         await staffService.remove(id);
         //console log for deletion success
         console.log("Staff deletion success");
         //Postman Test - deletion success response should display
-        res.status(204).send("Staff deletion success");
+        res.json("Staff deletion success");
     });
 
     //confirmation web server is up and running displays in console
