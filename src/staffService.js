@@ -21,9 +21,12 @@ async function getAll() {
 async function getById(id) {
     const staff = await storage.getItem(id);
     if (staff) {
+        //success return staff data based on id
         return staff;
     } else {
+        //log error in console if not staff id exists
         console.log(`Staff with id ${id} was not found.`);
+        //if not staff ID exist return in Postman null
         return null;
     }
 }
